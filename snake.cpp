@@ -14,7 +14,8 @@ Snake::Snake(int x, int y)
   tailY[3] = y;
   tailX[4] = x+5;
   tailY[4] = y;
-  strength = 200;
+  strength = 350;
+  key = 0;
 }
 Snake::~Snake()
 {
@@ -73,9 +74,9 @@ bool Snake::danceC()
 }
 bool Snake::danceS()
 {
-  if ((tailX[0]-headX == 1) && (tailY[0] - tailY[1] == 1)
+  if ((headX - tailX[0] == 1) && (tailY[0] - tailY[1] == 1)
      && (tailY[1]-tailY[2]==1) && (tailY[2]-tailY[3]==1) 
-     &&(tailX[4]-tailX[3]==1))
+     &&(tailX[3]-tailX[4]==1))
     return true;
   else  
     return false;
@@ -94,8 +95,7 @@ bool Snake::isDead()
   return (strength<=0);
 }
 void Snake::updatePosition(int x, int y)
-{
-  headX = x;
+{ headX = x;
   headY = y;
   tailX[0] = x+1; 
   tailY[0] = y;
@@ -119,4 +119,13 @@ int Snake::getHeadX()
 int Snake::getHeadY()
 {
   return headY;
+}
+void Snake::addAKey()
+{
+  key++;
+}
+
+int Snake::keyCollection()
+{
+  return key;
 }

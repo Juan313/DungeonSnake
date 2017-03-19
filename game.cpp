@@ -23,25 +23,40 @@ Game::~Game()
 
 void Game::play()
 {
-  playInEachSpace(s1,s);
- 
+  unsigned int seed = time(0);
+  srand(seed);
+  bool escape = false;
+  Space* space = s6;
+  while (!escape && space!=nullptr && s->keyCollection() < 6)
+  {
+    space = playInEachSpace(space,s);
+  }
+  
+  if (s->keyCollection()==6)
+  {
+    std::cout<<"Congratulations! The snake has escaped the dungeon!"
+             <<" You win!!!!!"<<std::endl;
+  } 
   
 }
  
 
-void Game::playInEachSpace(Space* sp, Snake* s)
+Space* Game::playInEachSpace(Space* sp, Snake* s)
 {
+  s->updatePosition(sp->getGridX()/2,sp->getGridY()/2);  
   bool escape = false; 
   Direction dir = LEFT;
   unsigned int microseconds1 = 350000;
   unsigned int microseconds2 = 400000;
+  bool obtainKey = false;
   while (!s->isDead() && !hitWall && !escape) 
 	 
   {
     std::cout << "\033[2J\033[1;1H";
-    std::cout<<"Strength of snake left is: "<<s->getStrength();
-    std::cout<<std::endl;
-    s1->printSpace();
+    std::cout<<"You are located at "<< sp->getName()<<". You have collected "<<s->keyCollection()<<" keys so far."<<std::endl;
+    std::cout<<"Strength of snake left is: "<<s->getStrength()<<std::endl;
+    sp->printInstruction();
+    sp->printSpace();
     usleep(microseconds1);
     if(kbhit())
     {
@@ -59,12 +74,12 @@ void Game::playInEachSpace(Space* sp, Snake* s)
 		    dir = RIGHT;
 		  }
 		  break;
-	case 'i': if (prev != DOWN) 
+	case 'k': if (prev != DOWN) 
 		  {
 		    dir = UP;
 		  }
 		  break;
-	case 'k': if(prev != UP)
+	case 'j': if(prev != UP)
 		  { 
 		    dir = DOWN;
 		  }
@@ -73,6 +88,12 @@ void Game::playInEachSpace(Space* sp, Snake* s)
     }
     usleep(microseconds2);
     s->move(dir);
+    if(!obtainKey && sp->makeItDance())
+    {
+      sp->setKeyX();
+      sp->setKeyY();
+      obtainKey = true;
+    }
     if (s->getHeadX()==sp->getOpeningX() && s->getHeadY() == sp->getOpeningY())
     {
       hitWall = false;
@@ -81,10 +102,35 @@ void Game::playInEachSpace(Space* sp, Snake* s)
     else 
     {
       hitWall = s->getHeadX()<0 || s->getHeadY()<0 || 
-          s->getHeadX() == s1->getGridX()|| s->getHeadY()== s1->getGridY();
+          s->getHeadX() == sp->getGridX()|| s->getHeadY()== sp->getGridY();
     } 
+  }  
+  if (s->isDead())
+  {
+    std::cout<<"Game over! The snake has run out of breath. You lose!"<<std::endl;
+    return nullptr;
   }
-
+  else if (getHitWall()) 
+  {
+    std::cout<<"Game over! The snake's head has bang on the dungeon wall and dead!!"<<std::endl;
+    return nullptr;
+  }
+  else if (s->keyCollection()<=4) 
+  {
+    s->addAKey();
+    std::cout << "\033[2J\033[1;1H";
+    std::cout<<"Congratulations! You've escaped "<<sp->getName()<<"!"<<std::endl;
+    std::cout<<"Press any key to continue to the next level."<<std::endl;
+    getchar();
+    return sp->nextSpace();
+  }
+  else 
+  {
+    s->addAKey();
+    std::cout << "\033[2J\033[1;1H";
+    return sp->nextSpace();
+  }
+   
 }
 bool Game::getHitWall()
 {

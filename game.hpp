@@ -18,7 +18,7 @@ public:
   Game(Space*, Space*, Space*, Space*, Space*, Space*, Snake*);
   ~Game();
   void play();
-  void playInEachSpace(Space*, Snake*);
+  Space* playInEachSpace(Space*, Snake*);
   bool getHitWall();
 };
 #endif

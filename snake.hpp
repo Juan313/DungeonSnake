@@ -2,7 +2,7 @@
 #define SNAKE_HPP
 
 
-enum Direction {STOP = 0, LEFT, RIGHT, UP, DOWN};
+enum Direction {LEFT, RIGHT, UP, DOWN};
 class Snake
 {
 
@@ -13,6 +13,7 @@ private:
   int tailX[5];
   int tailY[5];
   int strength;
+  int key;
 
 public:
 
@@ -29,6 +30,8 @@ public:
   int getStrength();
   int getHeadX();
   int getHeadY();
+  void addAKey();
+  int keyCollection();
 
 };
 

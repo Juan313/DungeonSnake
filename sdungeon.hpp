@@ -1,13 +1,13 @@
-#ifndef LDUNGEON_HPP
-#define LDUNGEON_HPP
+#ifndef SDUNGEON_HPP
+#define SDUNGEON_HPP
 #include "space.hpp"
 #include <string> 
 
-class LDungeon : public Space
+class SDungeon : public Space
 {
 public:
-LDungeon(int,int,Snake*, Space*, Space*,Space*,Space*,std::string);
-~LDungeon();
+SDungeon(int,int,Snake*, Space*, Space*,Space*,Space*,std::string);
+~SDungeon();
 bool makeItDance(); 
 int makeOpeningX();
 int makeOpeningY();
