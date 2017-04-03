@@ -112,7 +112,7 @@ Space* Game::playInEachSpace(Space* sp, Snake* s)
   }
   else if (getHitWall()) 
   {
-    std::cout<<"Game over! The snake's head has bang on the dungeon wall and dead!!"<<std::endl;
+    std::cout<<"Game over! The snake's head has banged on the dungeon wall and dead!!"<<std::endl;
     return nullptr;
   }
   else if (s->keyCollection()<=4) 
